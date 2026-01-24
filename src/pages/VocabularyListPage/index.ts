@@ -1,2 +1,1 @@
-export * from './IndexPage';
 export * from './VocabularyListPage';

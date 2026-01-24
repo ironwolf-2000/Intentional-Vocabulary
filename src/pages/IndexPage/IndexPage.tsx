@@ -1,24 +1,12 @@
 import { type FC } from 'react';
-import { Button, Group, AppShell, Flex, TextInput, ActionIcon, Title, Center, Indicator } from '@mantine/core';
-import { IconSearch, IconPlayerPlayFilled, IconBook2, IconUserCircle } from '@tabler/icons-react'; // Updated imports
-import languageIcon from '@/assets/united-kingdom.png';
+import { Button, Group, AppShell, Flex, TextInput, Title, Center, Indicator } from '@mantine/core';
+import { IconSearch, IconPlayerPlayFilled } from '@tabler/icons-react';
+import { Header } from '@/components';
 
 export const IndexPage: FC = () => {
   return (
     <AppShell padding='xl' header={{ height: 60 }}>
-      <AppShell.Header>
-        <Flex justify='space-between' align='center' w='100%' h='100%' px='md'>
-          <img src={languageIcon} width={32} height={32} alt='Language' />
-          <Group gap='sm'>
-            <ActionIcon variant='subtle' size='xl' aria-label='Vocab list'>
-              <IconBook2 />
-            </ActionIcon>
-            <ActionIcon variant='subtle' size='xl' aria-label='Profile'>
-              <IconUserCircle />
-            </ActionIcon>
-          </Group>
-        </Flex>
-      </AppShell.Header>
+      <Header />
 
       <AppShell.Main>
         <Center h='100%' w='100%' style={{ minHeight: 'calc(100vh - 240px)' }}>
@@ -49,7 +37,7 @@ export const IndexPage: FC = () => {
                     Review passive
                   </Button>
                 </Indicator>
-                <Indicator inline label='23' size={18} color='green' position='top-end' offset={8}>
+                <Indicator inline label='19' size={18} color='green' position='top-end' offset={8}>
                   <Button
                     variant='light'
                     leftSection={<IconPlayerPlayFilled size={16} />}

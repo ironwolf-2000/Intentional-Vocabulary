@@ -1,20 +1,8 @@
 import { type FC } from 'react';
 import { createGlobalStyle } from 'styled-components';
-import { IndexPage } from './pages';
-import { createBrowserRouter, Navigate, Outlet, RouterProvider } from 'react-router-dom';
 import { MantineProvider } from '@mantine/core';
-
-const router = createBrowserRouter([
-  {
-    path: '/',
-    element: <Outlet />,
-    children: [{ path: '/', element: <IndexPage /> }],
-  },
-  {
-    path: '*',
-    element: <Navigate to='/' replace />,
-  },
-]);
+import { router } from './router';
+import { RouterProvider } from 'react-router-dom';
 
 export const App: FC = () => (
   <MantineProvider>
