@@ -3,7 +3,9 @@ import { RouterProvider } from 'react-router-dom';
 import { router } from './router';
 import { createGlobalStyle } from 'styled-components';
 import { MantineProvider } from '@mantine/core';
+import { Notifications } from '@mantine/notifications';
 import '@mantine/core/styles.css';
+import '@mantine/notifications/styles.css';
 
 const GlobalStyle = createGlobalStyle`
   *,
@@ -37,6 +39,7 @@ const GlobalStyle = createGlobalStyle`
 
 createRoot(document.getElementById('root')!).render(
   <MantineProvider>
+    <Notifications />
     <RouterProvider router={router} />
     <GlobalStyle />
   </MantineProvider>,

@@ -8,18 +8,17 @@ import {
   Paper,
   Stack,
   Flex,
-  Button,
-  Modal,
   Text,
-  Divider,
   Group,
   Badge,
+  ActionIcon,
 } from '@mantine/core';
-import { IconTrash, IconSearch, IconAlertTriangle } from '@tabler/icons-react';
+import { IconTrash, IconSearch } from '@tabler/icons-react';
 import { DICTIONARY_VOCABULARY_MOCK } from '@/const';
-import { VocabFrequency } from '@/components';
+import { DeleteModal } from '@/components';
 import type { DictionaryEntryDetails } from '@/types';
 import { useNavigate } from 'react-router-dom';
+import { parseExampleText } from '@/helpers';
 
 type VocabularyCard = DictionaryEntryDetails & {
   id: string;
@@ -47,7 +46,6 @@ export const VocabularyListPage: FC = () => {
 
   const [mode, setMode] = useState<'reading' | 'writing'>('reading');
   const [search, setSearch] = useState('');
-  const [deleteModalOpened, setDeleteModalOpened] = useState(false);
   const [itemToDelete, setItemToDelete] = useState<VocabularyCard | null>(null);
 
   const getStoredIds = (key: 'readingCards' | 'writingCards'): string[] => {
@@ -67,20 +65,15 @@ export const VocabularyListPage: FC = () => {
 
   const filteredCards = cards.filter((card) => card.word.toLowerCase().includes(search.toLowerCase()));
 
-  const handleDeleteClick = (item: VocabularyCard) => {
-    setItemToDelete(item);
-    setDeleteModalOpened(true);
-  };
-
   const confirmDelete = () => {
-    if (!itemToDelete) return;
+    if (!itemToDelete) {
+      return;
+    }
 
     const key = mode === 'reading' ? 'readingCards' : 'writingCards';
     const currentIds = getStoredIds(key);
     const nextIds = currentIds.filter((id) => id !== itemToDelete.id);
     setStoredIds(key, nextIds);
-
-    setDeleteModalOpened(false);
     setItemToDelete(null);
   };
 
@@ -102,6 +95,7 @@ export const VocabularyListPage: FC = () => {
             <SegmentedControl
               value={mode}
               onChange={(value) => setMode(value as 'reading' | 'writing')}
+              color={mode === 'reading' ? 'blue' : 'green'}
               data={[
                 { label: 'Reading', value: 'reading' },
                 { label: 'Writing', value: 'writing' },
@@ -115,8 +109,7 @@ export const VocabularyListPage: FC = () => {
               <Table striped highlightOnHover verticalSpacing='sm' horizontalSpacing='lg'>
                 <Table.Thead>
                   <Table.Tr>
-                    <Table.Th style={{ width: 180 }}>Vocabulary</Table.Th>
-                    <Table.Th style={{ width: 160 }}>Frequency</Table.Th>
+                    <Table.Th style={{ width: 240 }}>Vocabulary</Table.Th>
                     <Table.Th>Definition</Table.Th>
                     <Table.Th>Example</Table.Th>
                     <Table.Th style={{ width: 60 }}>
@@ -140,24 +133,20 @@ export const VocabularyListPage: FC = () => {
                           </Badge>
                         </Group>
                       </Table.Td>
-                      <Table.Td>
-                        <VocabFrequency value={item.frequency.value} />
-                      </Table.Td>
                       <Table.Td c='gray.7'>{item.definition}</Table.Td>
-                      <Table.Td c='dimmed'>{item.examples[0]}</Table.Td>
+                      <Table.Td c='dimmed'>{parseExampleText(item.examples[0])}</Table.Td>
                       <Table.Td>
-                        <Button
+                        <ActionIcon
                           variant='subtle'
                           color='red'
-                          size='sm'
-                          leftSection={<IconTrash size={14} />}
+                          size='lg'
                           onClick={(e) => {
                             e.stopPropagation();
-                            handleDeleteClick(item);
+                            setItemToDelete(item);
                           }}
                         >
-                          Remove
-                        </Button>
+                          <IconTrash size={16} />
+                        </ActionIcon>
                       </Table.Td>
                     </Table.Tr>
                   ))}
@@ -165,45 +154,15 @@ export const VocabularyListPage: FC = () => {
               </Table>
             </Table.ScrollContainer>
           </Paper>
-
-          <Modal
-            opened={deleteModalOpened}
-            onClose={() => setDeleteModalOpened(false)}
-            centered
-            size='sm'
-            radius='md'
-            withCloseButton={false}
-            title={
-              <Group gap='xs'>
-                <IconAlertTriangle size={18} color='red' />
-                <Text fw={600}>Delete vocabulary</Text>
-              </Group>
-            }
-          >
-            <Stack gap='sm'>
-              <Text size='sm' c='dimmed'>
-                Are you sure you want to delete{' '}
-                <Text span fw={600} c='dark'>
-                  {itemToDelete?.word}
-                </Text>
-                ? This action cannot be undone.
-              </Text>
-
-              <Divider />
-
-              <Group justify='flex-end' gap='sm'>
-                <Button variant='subtle' onClick={() => setDeleteModalOpened(false)}>
-                  Cancel
-                </Button>
-
-                <Button color='red' leftSection={<IconTrash size={16} />} onClick={confirmDelete}>
-                  Delete
-                </Button>
-              </Group>
-            </Stack>
-          </Modal>
         </Stack>
       </Center>
+      <DeleteModal
+        open={itemToDelete !== null}
+        deleteItemName={itemToDelete?.word ?? ''}
+        mode={mode}
+        onClose={() => setItemToDelete(null)}
+        onDelete={confirmDelete}
+      />
     </AppShell.Main>
   );
 };

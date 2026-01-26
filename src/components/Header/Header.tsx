@@ -1,14 +1,6 @@
 import { type FC } from 'react';
 import { AppShell, Flex, Group, Image, ActionIcon, Menu, Tooltip, Text } from '@mantine/core';
-import {
-  IconUserCircle,
-  IconPlus,
-  IconSettings,
-  IconChartBar,
-  IconBook2,
-  IconNotes,
-  IconCards,
-} from '@tabler/icons-react';
+import { IconUserCircle, IconSettings, IconChartBar, IconBook2, IconNotes, IconCards } from '@tabler/icons-react';
 import { Link, useLocation } from 'react-router-dom';
 import englishIcon from '@/assets/english.png';
 import germanIcon from '@/assets/german.png';
@@ -36,7 +28,7 @@ export const Header: FC = () => {
       <Flex justify='space-between' align='center' w='100%' h='100%' px='md'>
         <Group gap='md'>
           <Menu position='bottom-end' width={240}>
-            <Group gap='xs' w={164}>
+            <Group gap='xs' w={104}>
               <Menu.Target>
                 <Tooltip label='Current Language' withArrow color='blue.7'>
                   <ActionIcon variant='subtle' size='xl'>
@@ -74,12 +66,6 @@ export const Header: FC = () => {
         {location.pathname.startsWith('/dictionary') && <SearchAutocomplete w={500} size='md' radius='xl' />}
 
         <Group gap='md'>
-          <Tooltip label='Add New Word' withArrow color='blue.7'>
-            <ActionIcon component={Link} to='/create' variant='subtle' size='xl' aria-label='Add New Word'>
-              <IconPlus size={28} />
-            </ActionIcon>
-          </Tooltip>
-
           <Tooltip label='Saved Vocabulary' withArrow color='blue.7'>
             <ActionIcon
               component={Link}
@@ -101,7 +87,7 @@ export const Header: FC = () => {
             <Menu.Dropdown>
               {PROFILE_ITEMS.map(({ label, icon: Icon }) => (
                 <Tooltip key={label} label="The prototype version doesn't have this page" color='dark.5' withArrow>
-                  <Menu.Item h={60}>
+                  <Menu.Item h={50}>
                     <Group gap='md'>
                       <Icon size={24} />
                       <Text>{label}</Text>
