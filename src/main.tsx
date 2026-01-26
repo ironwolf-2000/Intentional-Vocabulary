@@ -4,7 +4,6 @@ import { router } from './router';
 import { createGlobalStyle } from 'styled-components';
 import { MantineProvider } from '@mantine/core';
 import '@mantine/core/styles.css';
-import '@mantine/carousel/styles.css';
 
 const GlobalStyle = createGlobalStyle`
   *,

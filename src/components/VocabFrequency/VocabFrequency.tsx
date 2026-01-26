@@ -13,7 +13,7 @@ const progressProps = {
 
 export const VocabFrequency: FC<VocabFrequencyProps> = ({ value }) => {
   return (
-    <Group grow gap={5} mt='xs' w={100}>
+    <Group grow gap={5} w={100}>
       <Progress {...progressProps} value={100} />
       <Progress {...progressProps} value={value < 2 ? 0 : 100} />
       <Progress {...progressProps} value={value < 3 ? 0 : 100} />

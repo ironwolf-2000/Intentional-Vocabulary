@@ -1,20 +1,10 @@
+import { DICTIONARY_VOCABULARY_MOCK } from '@/const';
 import { Autocomplete, type MantineRadius, type MantineSize } from '@mantine/core';
 import { IconSearch } from '@tabler/icons-react';
 import { useState, type FC } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-const AUTOCOMPLETE_WORDS = [
-  'hello world',
-  'good morning',
-  'thank you',
-  'please excuse me',
-  'how are you',
-  'nice to meet you',
-  'see you later',
-  'have a good day',
-  'break a leg',
-  'piece of cake',
-];
+const AUTOCOMPLETE_WORDS = DICTIONARY_VOCABULARY_MOCK.map(({ word }) => word);
 
 type SearchAutocompleteProps = {
   w: number;
@@ -49,7 +39,7 @@ export const SearchAutocomplete: FC<SearchAutocompleteProps> = ({ w, size, radiu
       value={searchValue}
       onChange={(val) => {
         setSearchValue(val);
-        setDropdownOpened(val.length > 0);
+        setDropdownOpened(true);
       }}
       onBlur={() => setDropdownOpened(false)}
       dropdownOpened={dropdownOpened}
