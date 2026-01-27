@@ -5,7 +5,7 @@ import type { FC } from 'react';
 type DeleteModalProps = {
   open: boolean;
   deleteItemName: string;
-  mode: 'reading' | 'writing';
+  mode: 'passive' | 'active';
   onClose: () => void;
   onDelete: () => void;
 };

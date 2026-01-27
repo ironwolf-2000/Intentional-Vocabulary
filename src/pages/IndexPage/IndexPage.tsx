@@ -3,23 +3,18 @@ import { Button, AppShell, Group, Card, Text, Image, Stack, Tooltip, Box } from 
 import { IconPlayerPlayFilled } from '@tabler/icons-react';
 import englishIcon from '@/assets/english.png';
 import { SearchAutocomplete } from '@/components';
-
-const getStoredCount = (key: string): number => {
-  try {
-    const raw = localStorage.getItem(key);
-    const parsed = raw ? JSON.parse(raw) : [];
-    return Array.isArray(parsed) ? parsed.length : 0;
-  } catch {
-    return 0;
-  }
-};
+import { Link } from 'react-router-dom';
+import { getDueCards } from '@/helpers';
 
 export const IndexPage: FC = () => {
-  const readingCount = getStoredCount('readingCards');
-  const writingCount = getStoredCount('writingCards');
+  const passiveDueCards = getDueCards('passiveReviewCards');
+  const activeDueCards = getDueCards('activeReviewCards');
 
-  const hasReading = readingCount > 0;
-  const hasWriting = writingCount > 0;
+  const passiveCardsCount = Object.keys(passiveDueCards).length;
+  const activeCardsCount = Object.keys(activeDueCards).length;
+
+  const hasPassiveCards = passiveCardsCount > 0;
+  const hasActiveCards = activeCardsCount > 0;
 
   return (
     <AppShell.Main>
@@ -51,22 +46,24 @@ export const IndexPage: FC = () => {
 
             <Group gap='lg' justify='center'>
               <Tooltip
-                label={!hasReading ? 'No reading cards are due' : undefined}
+                label={!hasPassiveCards ? 'No cards are due today' : undefined}
                 color='blue'
                 withArrow
-                disabled={hasReading}
+                disabled={hasPassiveCards}
                 position='bottom'
               >
                 <Box>
                   <Button
                     leftSection={<IconPlayerPlayFilled size={14} />}
+                    component={Link}
+                    to='/passive-review'
                     radius='md'
                     color='blue'
                     size='md'
                     variant='light'
-                    aria-disabled={!hasReading}
+                    aria-disabled={!hasPassiveCards}
                     styles={{
-                      root: !hasReading
+                      root: !hasPassiveCards
                         ? {
                             opacity: 0.5,
                             cursor: 'default',
@@ -75,16 +72,16 @@ export const IndexPage: FC = () => {
                         : undefined,
                     }}
                   >
-                    Reading{hasReading && ` (${readingCount})`}
+                    Passive{hasPassiveCards && ` (${passiveCardsCount})`}
                   </Button>
                 </Box>
               </Tooltip>
 
               <Tooltip
-                label={!hasWriting ? 'No writing cards are due' : undefined}
+                label={!hasActiveCards ? 'No cards are due today' : undefined}
                 color='green'
                 withArrow
-                disabled={hasWriting}
+                disabled={hasActiveCards}
                 position='bottom'
               >
                 <Box>
@@ -94,9 +91,9 @@ export const IndexPage: FC = () => {
                     color='green'
                     size='md'
                     variant='light'
-                    aria-disabled={!hasWriting}
+                    aria-disabled={!hasActiveCards}
                     styles={{
-                      root: !hasWriting
+                      root: !hasActiveCards
                         ? {
                             opacity: 0.5,
                             cursor: 'default',
@@ -105,7 +102,7 @@ export const IndexPage: FC = () => {
                         : undefined,
                     }}
                   >
-                    Writing{hasWriting && ` (${writingCount})`}
+                    Active{hasActiveCards && ` (${activeCardsCount})`}
                   </Button>
                 </Box>
               </Tooltip>

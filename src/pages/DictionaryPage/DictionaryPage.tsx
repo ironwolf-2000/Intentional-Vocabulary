@@ -16,24 +16,12 @@ import {
   Center,
 } from '@mantine/core';
 import { notifications } from '@mantine/notifications';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { DICTIONARY_VOCABULARY_MOCK } from '@/const';
 import { DeleteModal } from '@/components';
 import { IconArrowsShuffle, IconBook, IconPencil, IconVolume } from '@tabler/icons-react';
 import type { DictionaryEntryDetails, PartOfSpeech } from '@/types';
-import { parseExampleText } from '@/helpers';
-
-const getStoredIds = (key: 'readingCards' | 'writingCards'): string[] => {
-  try {
-    return JSON.parse(localStorage.getItem(key) || '[]');
-  } catch {
-    return [];
-  }
-};
-
-const setStoredIds = (key: 'readingCards' | 'writingCards', ids: string[]) => {
-  localStorage.setItem(key, JSON.stringify(ids));
-};
+import { parseExampleText, getReviewCards, setReviewCard, deleteReviewCard } from '@/helpers';
 
 export const DictionaryPage: FC = () => {
   const navigate = useNavigate();
@@ -42,48 +30,47 @@ export const DictionaryPage: FC = () => {
   const entry = DICTIONARY_VOCABULARY_MOCK.find((e) => e.word === word);
 
   const [currentExampleIndex, setCurrentExampleIndex] = useState<Record<number, number | undefined>>({});
-  const [deleteModalData, setDeleteModalData] = useState<{ detailIndex: number; type: 'reading' | 'writing' } | null>(
+  const [deleteModalData, setDeleteModalData] = useState<{ detailIndex: number; type: 'passive' | 'active' } | null>(
     null,
   );
 
-  const [addedByDetail, setAddedByDetail] = useState<Record<number, { reading: boolean; writing: boolean }>>({});
+  const [addedByDetail, setAddedByDetail] = useState<Record<number, { passive: boolean; active: boolean }>>({});
 
   useEffect(() => {
     if (!entry) return;
 
-    const readingIds = new Set(getStoredIds('readingCards'));
-    const writingIds = new Set(getStoredIds('writingCards'));
-    const initial: Record<number, { reading: boolean; writing: boolean }> = {};
+    const passiveReviewCards = getReviewCards('passiveReviewCards');
+    const activeReviewCards = getReviewCards('activeReviewCards');
+    const initial: Record<number, { passive: boolean; active: boolean }> = {};
 
     entry.details.forEach((detail, index) => {
       initial[index] = {
-        reading: readingIds.has(detail.id),
-        writing: writingIds.has(detail.id),
+        passive: detail.id in passiveReviewCards,
+        active: detail.id in activeReviewCards,
       };
     });
 
     queueMicrotask(() => setAddedByDetail(initial));
   }, [entry]);
 
-  const toggleAdd = (detailIndex: number, type: 'reading' | 'writing') => {
+  const toggleAdd = (detailIndex: number, type: 'passive' | 'active') => {
     const detailId = entry!.details[detailIndex].id;
-    const storageKey = type === 'reading' ? 'readingCards' : 'writingCards';
-    const currentIds = getStoredIds(storageKey);
-    const isAlreadyAdded = currentIds.includes(detailId);
+    const storageKey = type === 'passive' ? 'passiveReviewCards' : 'activeReviewCards';
+    const reviewCards = getReviewCards(storageKey);
+    const isAlreadyAdded = detailId in reviewCards;
 
     if (isAlreadyAdded) {
-      // Show confirmation modal for removal
       setDeleteModalData({ detailIndex, type });
     } else {
-      const nextIds = isAlreadyAdded ? currentIds.filter((id) => id !== detailId) : [...currentIds, detailId];
+      const dueDate = new Date();
+      dueDate.setHours(0, 0, 0, 0);
 
-      setStoredIds(storageKey, nextIds);
-
+      setReviewCard(storageKey, detailId, dueDate);
       setAddedByDetail((prev) => ({
         ...prev,
         [detailIndex]: {
-          reading: prev[detailIndex]?.reading ?? false,
-          writing: prev[detailIndex]?.writing ?? false,
+          passive: prev[detailIndex]?.passive ?? false,
+          active: prev[detailIndex]?.active ?? false,
           [type]: !isAlreadyAdded,
         },
       }));
@@ -92,8 +79,7 @@ export const DictionaryPage: FC = () => {
         notifications.show({
           title: (
             <>
-              <strong>"{entry.word}"</strong> {isAlreadyAdded ? 'removed from' : 'added to'}{' '}
-              <strong>{type.charAt(0).toUpperCase() + type.slice(1)}</strong>
+              <strong>"{entry.word}"</strong> {isAlreadyAdded ? 'removed from' : 'added to'} {type} practice.
             </>
           ),
           message: '',
@@ -112,18 +98,14 @@ export const DictionaryPage: FC = () => {
 
     const { detailIndex, type } = deleteModalData;
     const detailId = entry!.details[detailIndex].id;
-    const storageKey = type === 'reading' ? 'readingCards' : 'writingCards';
+    const storageKey = type === 'passive' ? 'passiveReviewCards' : 'activeReviewCards';
 
-    const currentIds = getStoredIds(storageKey);
-    const nextIds = currentIds.filter((id) => id !== detailId);
-
-    setStoredIds(storageKey, nextIds);
-
+    deleteReviewCard(storageKey, detailId);
     setAddedByDetail((prev) => ({
       ...prev,
       [detailIndex]: {
-        reading: prev[detailIndex]?.reading ?? false,
-        writing: prev[detailIndex]?.writing ?? false,
+        passive: prev[detailIndex]?.passive ?? false,
+        active: prev[detailIndex]?.active ?? false,
         [type]: false,
       },
     }));
@@ -134,8 +116,7 @@ export const DictionaryPage: FC = () => {
       notifications.show({
         title: (
           <>
-            <strong>"{entry.word}"</strong> removed from{' '}
-            <strong>{deleteModalData.type.charAt(0).toUpperCase() + deleteModalData.type.slice(1)}</strong>
+            <strong>"{entry.word}"</strong> removed from {deleteModalData.type} practice.
           </>
         ),
         message: '',
@@ -163,8 +144,8 @@ export const DictionaryPage: FC = () => {
                   <strong>{word}</strong>" is not one of them.
                 </Text>
               </Stack>
-              <Button size='md' radius='md' variant='light' onClick={() => navigate('/')}>
-                Back to search
+              <Button size='lg' radius='md' variant='light' color='blue' w={200} component={Link} to='/'>
+                Home page
               </Button>
             </Stack>
           </Center>
@@ -189,25 +170,33 @@ export const DictionaryPage: FC = () => {
     return (
       <Paper key={id} w='100%' p='lg' withBorder radius='lg' shadow='sm' pos='relative'>
         <Group gap='xs' pos='absolute' top={20} right={20}>
-          <Tooltip label={addedByDetail[index]?.reading ? 'Remove from reading' : 'Add to reading'} withArrow>
+          <Tooltip
+            label={addedByDetail[index]?.passive ? 'Remove from passive practice' : 'Add to passive practice'}
+            withArrow
+            color='indigo'
+          >
             <ActionIcon
               size='md'
-              variant={addedByDetail[index]?.reading ? 'filled' : 'subtle'}
+              variant={addedByDetail[index]?.passive ? 'filled' : 'subtle'}
               color='indigo'
-              onClick={() => toggleAdd(index, 'reading')}
-              aria-label='Reading'
+              onClick={() => toggleAdd(index, 'passive')}
+              aria-label='Passive'
             >
               <IconBook size={18} />
             </ActionIcon>
           </Tooltip>
 
-          <Tooltip label={addedByDetail[index]?.writing ? 'Remove from writing' : 'Add to writing'} withArrow>
+          <Tooltip
+            label={addedByDetail[index]?.active ? 'Remove from active practice' : 'Add to active practice'}
+            withArrow
+            color='indigo'
+          >
             <ActionIcon
               size='md'
-              variant={addedByDetail[index]?.writing ? 'filled' : 'subtle'}
+              variant={addedByDetail[index]?.active ? 'filled' : 'subtle'}
               color='indigo'
-              onClick={() => toggleAdd(index, 'writing')}
-              aria-label='Writing'
+              onClick={() => toggleAdd(index, 'active')}
+              aria-label='Active'
             >
               <IconPencil size={18} />
             </ActionIcon>
@@ -218,7 +207,7 @@ export const DictionaryPage: FC = () => {
           <Stack gap='sm'>
             <Group gap='xs'>
               {partOfSpeech.description ? (
-                <Tooltip label={partOfSpeech.description} withArrow position='bottom' color='indigo.4'>
+                <Tooltip label={partOfSpeech.description} withArrow position='bottom' color='indigo'>
                   {renderBadge(partOfSpeech)}
                 </Tooltip>
               ) : (
@@ -275,18 +264,20 @@ export const DictionaryPage: FC = () => {
                   </Text>
                 </Blockquote>
 
-                <ActionIcon
-                  variant='subtle'
-                  size='xl'
-                  color='indigo.5'
-                  onClick={() => {
-                    const nextIndex = ((currentExampleIndex[index] ?? 0) + 1) % examples.length;
-                    setCurrentExampleIndex({ ...currentExampleIndex, [index]: nextIndex });
-                  }}
-                  aria-label='Random example'
-                >
-                  <IconArrowsShuffle size={20} />
-                </ActionIcon>
+                <Tooltip label='Random example' withArrow color='indigo'>
+                  <ActionIcon
+                    variant='subtle'
+                    size='xl'
+                    color='indigo'
+                    onClick={() => {
+                      const nextIndex = ((currentExampleIndex[index] ?? 0) + 1) % examples.length;
+                      setCurrentExampleIndex({ ...currentExampleIndex, [index]: nextIndex });
+                    }}
+                    aria-label='Random example'
+                  >
+                    <IconArrowsShuffle size={20} />
+                  </ActionIcon>
+                </Tooltip>
               </Group>
             </div>
           )}
@@ -303,8 +294,8 @@ export const DictionaryPage: FC = () => {
             {entry.word}
           </Title>
 
-          <Tooltip label="Audio isn't available in prototype version" withArrow color='dark.5'>
-            <ActionIcon variant='subtle' color='dark' size='md' mt={4} aria-label='Audio (coming soon)'>
+          <Tooltip label="Audio isn't available in prototype version" withArrow color='dark'>
+            <ActionIcon variant='subtle' color='dark' size='lg' mt={4} aria-label='Audio (coming soon)'>
               <IconVolume size={28} stroke={1.5} />
             </ActionIcon>
           </Tooltip>
@@ -317,7 +308,7 @@ export const DictionaryPage: FC = () => {
       <DeleteModal
         open={deleteModalData !== null}
         deleteItemName={entry.word}
-        mode={deleteModalData?.type ?? 'reading'}
+        mode={deleteModalData?.type ?? 'passive'}
         onClose={() => setDeleteModalData(null)}
         onDelete={confirmDelete}
       />

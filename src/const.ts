@@ -18,6 +18,10 @@ export const DICTIONARY_VOCABULARY_MOCK: DictionaryEntry[] = [
           'The experiment <word>yielded</word> unexpected results.',
           'This method <word>yields</word> better performance.',
         ],
+        reviewExamples: [
+          'Years of careful planning and incremental improvements finally <word>yielded</word> results, though not in the dramatic fashion investors had once imagined.',
+          'Despite initial skepticism, the long-term strategy <word>yielded</word> a steady stream of benefits that reshaped the organization’s future.',
+        ],
       },
       {
         id: '1-2',
@@ -32,6 +36,10 @@ export const DICTIONARY_VOCABULARY_MOCK: DictionaryEntry[] = [
           'The bridge did not <word>yield</word> despite the load.',
           'He eventually <word>yielded</word> to public opinion.',
         ],
+        reviewExamples: [
+          'Though battered by criticism and political opposition, he refused to <word>yield</word>, maintaining his position long after compromise would have been easier.',
+          'The ancient walls appeared immovable, yet under centuries of erosion they slowly <word>yielded</word> to forces no architect could command.',
+        ],
       },
       {
         id: '1-3',
@@ -45,6 +53,10 @@ export const DICTIONARY_VOCABULARY_MOCK: DictionaryEntry[] = [
           'Crop <word>yield</word> depends on climate conditions.',
           'This field has a high wheat <word>yield</word>.',
           'Improved methods increased overall <word>yield</word>.',
+        ],
+        reviewExamples: [
+          'After years of intensive cultivation, the land’s <word>yield</word> began to decline, revealing the hidden cost of short-term abundance.',
+          'Scientists warned that maximizing immediate <word>yield</word> often undermines sustainability over successive generations.',
         ],
       },
     ],
@@ -67,6 +79,10 @@ export const DICTIONARY_VOCABULARY_MOCK: DictionaryEntry[] = [
           'She made a <word>subtle</word> point about intent.',
           'The wording carries <word>subtle</word> implications.',
         ],
+        reviewExamples: [
+          'His critique was <word>subtle</word>, layered with implication rather than accusation, and required careful reading to be fully understood.',
+          'The author’s <word>subtle</word> manipulation of language transformed an ordinary observation into a profound insight.',
+        ],
       },
       {
         id: '2-2',
@@ -80,6 +96,10 @@ export const DICTIONARY_VOCABULARY_MOCK: DictionaryEntry[] = [
           'The pattern contains <word>subtle</word> variations.',
           'There was a <word>subtle</word> smell in the room.',
           'Lighting caused <word>subtle</word> shifts in color.',
+        ],
+        reviewExamples: [
+          'Only a <word>subtle</word> shift in her expression betrayed the disappointment she otherwise concealed.',
+          'The warning signs were <word>subtle</word>, easily dismissed until their cumulative effect became impossible to ignore.',
         ],
       },
     ],
@@ -102,6 +122,10 @@ export const DICTIONARY_VOCABULARY_MOCK: DictionaryEntry[] = [
           'Stress was <word>compounded</word> by uncertainty.',
           'Poor planning <word>compounded</word> existing issues.',
         ],
+        reviewExamples: [
+          'Each misguided decision served only to <word>compound</word> the crisis, transforming a manageable setback into a systemic failure.',
+          'His silence <word>compounded</word> the misunderstanding, allowing resentment to harden into something irreversible.',
+        ],
       },
       {
         id: '3-2',
@@ -116,6 +140,10 @@ export const DICTIONARY_VOCABULARY_MOCK: DictionaryEntry[] = [
           'They entered a guarded residential <word>compound</word>.',
           'The military <word>compound</word> was heavily protected.',
         ],
+        reviewExamples: [
+          'Hidden beyond the tree line stood a fortified <word>compound</word>, its high walls signaling both authority and isolation.',
+          'The diplomat was escorted through the sprawling <word>compound</word>, where power was exercised quietly behind guarded gates.',
+        ],
       },
       {
         id: '3-3',
@@ -129,6 +157,10 @@ export const DICTIONARY_VOCABULARY_MOCK: DictionaryEntry[] = [
           'The term has a <word>compound</word> meaning.',
           '<word>Compound</word> sentences join independent clauses.',
           'This is a <word>compound</word> material.',
+        ],
+        reviewExamples: [
+          'The researcher focused on the <word>compound</word> nature of the problem, where economic, social, and psychological factors intertwined.',
+          'Language itself is often <word>compound</word>, shaped by layers of history that resist simple interpretation.',
         ],
       },
     ],
@@ -151,6 +183,10 @@ export const DICTIONARY_VOCABULARY_MOCK: DictionaryEntry[] = [
           'His <word>account</word> differed from the official version.',
           'The witness provided a clear <word>account</word>.',
         ],
+        reviewExamples: [
+          'Her written <word>account</word> of the expedition blended factual precision with moments of quiet reflection.',
+          'The historian pieced together an <word>account</word> from letters, journals, and fragments long overlooked.',
+        ],
       },
       {
         id: '4-2',
@@ -165,146 +201,9 @@ export const DICTIONARY_VOCABULARY_MOCK: DictionaryEntry[] = [
           'Costs were <word>accounted</word> for separately.',
           'These factors <word>account</word> for the difference.',
         ],
-      },
-    ],
-  },
-
-  // Four new words
-  {
-    id: '5',
-    word: 'margin',
-    details: [
-      {
-        id: '5-1',
-        definition: 'The edge or border of something.',
-        partOfSpeech: { value: 'noun', description: 'Plural: margins' },
-        register: 'neutral',
-        synonyms: ['edge', 'border', 'periphery'],
-        antonyms: ['center', 'middle'],
-        examples: [
-          'Notes were written in the <word>margin</word>.',
-          'The figure appears in the <word>margin</word>.',
-          'She made corrections in the <word>margins</word>.',
-          'The text extended beyond the <word>margin</word>.',
-        ],
-      },
-      {
-        id: '5-2',
-        definition: 'An amount by which something is won or lost.',
-        partOfSpeech: { value: 'noun', description: 'Plural: margins' },
-        register: 'formal',
-        synonyms: ['difference', 'leeway', 'buffer'],
-        antonyms: ['deficit', 'shortfall'],
-        examples: [
-          'The victory came by a narrow <word>margin</word>.',
-          'Profit <word>margins</word> declined significantly.',
-          'They lost by a small <word>margin</word>.',
-          '<word>Margins</word> improved after restructuring.',
-        ],
-      },
-    ],
-  },
-
-  {
-    id: '6',
-    word: 'strain',
-    details: [
-      {
-        id: '6-1',
-        definition: 'To exert or stretch beyond normal limits.',
-        partOfSpeech: { value: 'verb', description: 'Other forms: strained' },
-        register: 'neutral',
-        synonyms: ['stretch', 'overextend', 'tax'],
-        antonyms: ['relax', 'ease'],
-        examples: [
-          'The task <word>strained</word> available resources.',
-          'He <word>strained</word> to hear the conversation.',
-          'The engine <word>strained</word> under heavy load.',
-          'She <word>strained</word> her back lifting the box.',
-        ],
-      },
-      {
-        id: '6-2',
-        definition: 'Pressure or tension resulting from demands.',
-        partOfSpeech: { value: 'noun', description: 'Plural: strains' },
-        register: 'formal',
-        synonyms: ['pressure', 'tension', 'stress'],
-        antonyms: ['relief', 'ease'],
-        examples: [
-          'The system is under considerable <word>strain</word>.',
-          'Financial <word>strain</word> affected the project.',
-          'The relationship showed signs of <word>strain</word>.',
-          'Long hours caused mental <word>strain</word>.',
-        ],
-      },
-    ],
-  },
-
-  {
-    id: '7',
-    word: 'retain',
-    details: [
-      {
-        id: '7-1',
-        definition: 'To continue to have or keep possession of something.',
-        partOfSpeech: { value: 'verb', description: 'Other forms: retained' },
-        register: 'formal',
-        synonyms: ['keep', 'maintain', 'hold'],
-        antonyms: ['lose', 'discard', 'release'],
-        examples: [
-          'The company <word>retained</word> its workforce.',
-          'She <word>retained</word> control over the process.',
-          'He <word>retained</word> ownership of the property.',
-          'The policy helps <word>retain</word> employees.',
-        ],
-      },
-      {
-        id: '7-2',
-        definition: 'To keep something in memory.',
-        partOfSpeech: { value: 'verb', description: 'Other forms: retained' },
-        register: 'formal',
-        synonyms: ['remember', 'memorize', 'preserve'],
-        antonyms: ['forget', 'lose'],
-        examples: [
-          'Only key details were <word>retained</word>.',
-          'Information is better <word>retained</word> through repetition.',
-          'Students <word>retain</word> concepts through practice.',
-          'Visual aids help <word>retain</word> information.',
-        ],
-      },
-    ],
-  },
-
-  {
-    id: '8',
-    word: 'framework',
-    details: [
-      {
-        id: '8-1',
-        definition: 'A basic structure underlying a system or concept.',
-        partOfSpeech: { value: 'noun', description: 'Plural: frameworks' },
-        register: 'formal',
-        synonyms: ['structure', 'system', 'skeleton'],
-        antonyms: ['chaos', 'disorder'],
-        examples: [
-          'The theory provides a conceptual <word>framework</word>.',
-          'A legal <word>framework</word> was established.',
-          'The model operates within a defined <word>framework</word>.',
-          'Ethical <word>frameworks</word> guide decision-making.',
-        ],
-      },
-      {
-        id: '8-2',
-        definition: 'A supporting structure.',
-        partOfSpeech: { value: 'noun', description: 'Plural: frameworks' },
-        register: 'technical',
-        synonyms: ['support', 'skeleton', 'structure'],
-        antonyms: ['void', 'gap'],
-        examples: [
-          'The building’s <word>framework</word> was reinforced.',
-          'Steel formed the main <word>framework</word>.',
-          'The <word>framework</word> supports the entire structure.',
-          'Damage to the <word>framework</word> caused collapse.',
+        reviewExamples: [
+          'Any serious analysis must <word>account</word> for the social consequences that statistics alone cannot capture.',
+          'The theory fails precisely because it cannot <word>account</word> for human behavior under extreme conditions.',
         ],
       },
     ],
