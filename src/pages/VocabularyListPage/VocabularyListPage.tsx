@@ -12,8 +12,9 @@ import {
   Group,
   Badge,
   ActionIcon,
+  Tooltip,
 } from '@mantine/core';
-import { IconTrash, IconSearch } from '@tabler/icons-react';
+import { IconTrash, IconSearch, IconInfoCircle } from '@tabler/icons-react';
 import { DeleteModal } from '@/components';
 import { deleteReviewCard, getReviewCards, parseExampleText } from '@/helpers';
 import type { VocabularyCard } from '@/types';
@@ -84,7 +85,24 @@ export const VocabularyListPage: FC = () => {
                     <Table.Th style={{ width: 240 }}>Vocabulary</Table.Th>
                     <Table.Th>Definition</Table.Th>
                     <Table.Th>Example</Table.Th>
-                    <Table.Th style={{ width: 160 }}>Due Date</Table.Th>
+                    <Table.Th style={{ width: 160 }}>
+                      <Group gap={4} align='center'>
+                        <Text fw={700} fz={14}>
+                          Due Date
+                        </Text>
+                        <Tooltip
+                          label='Due dates are approximate in this prototype'
+                          withArrow
+                          color='dark.5'
+                          position='top'
+                        >
+                          <ActionIcon variant='subtle' size='xs' color='dark.5' aria-label='Info'>
+                            <IconInfoCircle size={16} />
+                          </ActionIcon>
+                        </Tooltip>
+                      </Group>
+                    </Table.Th>
+
                     <Table.Th style={{ width: 60 }}>
                       <span style={{ visibility: 'hidden' }}>Actions</span>
                     </Table.Th>

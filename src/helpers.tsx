@@ -2,7 +2,7 @@ import { Text } from '@mantine/core';
 import type { VocabularyCard } from './types';
 import { DICTIONARY_VOCABULARY_MOCK } from './const';
 
-export const parseExampleText = (text: string): React.ReactNode => {
+export const parseExampleText = (text: string, useClozeDeletion = false): React.ReactNode => {
   const wordRegex = /<word>(.*?)<\/word>/g;
   const parts: React.ReactNode[] = [];
   let lastIndex = 0;
@@ -15,7 +15,7 @@ export const parseExampleText = (text: string): React.ReactNode => {
 
     parts.push(
       <Text key={parts.length} span fw={700} style={{ fontSize: 'inherit' }}>
-        {match[1]}
+        {useClozeDeletion ? '...' : match[1]}
       </Text>,
     );
 

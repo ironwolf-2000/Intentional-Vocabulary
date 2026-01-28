@@ -1,5 +1,5 @@
 import { createBrowserRouter, Navigate } from 'react-router-dom';
-import { DictionaryPage, IndexPage, PassiveReviewPage, VocabularyListPage } from './pages';
+import { ActiveReviewPage, DictionaryPage, IndexPage, PassiveReviewPage, VocabularyListPage } from './pages';
 import { AppLayout } from './AppLayout';
 
 export const router = createBrowserRouter([
@@ -19,6 +19,10 @@ export const router = createBrowserRouter([
       {
         path: 'passive-review',
         element: <PassiveReviewPage />,
+      },
+      {
+        path: 'active-review',
+        element: <ActiveReviewPage />,
       },
     ],
   },

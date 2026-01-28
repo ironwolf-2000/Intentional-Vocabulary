@@ -5,9 +5,9 @@ import {
   IconSettings,
   IconChartBar,
   IconBook2,
-  IconNotes,
   IconHome,
   IconWorld,
+  IconLogout,
 } from '@tabler/icons-react';
 import { Link, useLocation } from 'react-router-dom';
 import englishIcon from '@/assets/english.png';
@@ -24,9 +24,9 @@ const LANGUAGE_ITEMS = [
 ];
 
 const PROFILE_ITEMS = [
-  { label: 'Drafts', icon: IconNotes },
   { label: 'Stats', icon: IconChartBar },
   { label: 'Settings', icon: IconSettings },
+  { label: 'Log out', icon: IconLogout },
 ];
 
 export const Header: FC = () => {
@@ -110,7 +110,12 @@ export const Header: FC = () => {
             </Menu.Target>
             <Menu.Dropdown>
               {PROFILE_ITEMS.map(({ label, icon: Icon }) => (
-                <Tooltip key={label} label="The prototype version doesn't have this page" color='dark.5' withArrow>
+                <Tooltip
+                  key={label}
+                  label={`The prototype version doesn't have this ${label === 'Log out' ? 'function' : 'page'}`}
+                  color='dark.5'
+                  withArrow
+                >
                   <Menu.Item h={50}>
                     <Group gap='md'>
                       <Icon size={24} />

@@ -1,5 +1,5 @@
 export type PartOfSpeech = {
-  value: 'noun' | 'verb' | 'adj.' | 'adv.' | 'pron.' | 'prep.' | 'conj.';
+  value: 'noun' | 'verb' | 'adj.' | 'adv.' | 'pron.' | 'prep.' | 'conj.' | 'idiom';
   description?: string; // verb forms; adjective comparative/superlative forms, etc.
 };
 
@@ -7,6 +7,7 @@ export type DictionaryEntryDetails = {
   id: string;
   definition: string;
   partOfSpeech: PartOfSpeech;
+  wordForms: string[];
   register: string;
   synonyms?: string[];
   antonyms?: string[];

@@ -28,7 +28,7 @@ export const CompletedReviewsCard: FC = () => {
           >
             <Stack gap='xl' align='center'>
               <Text size='lg' c='dark.7'>
-                You’ve reviewed every vocabulary card scheduled for today.
+                You’ve reviewed all vocabulary cards scheduled for today.
               </Text>
               <Button size='lg' radius='md' variant='filled' color='green' w={200} component={Link} to='/'>
                 Home page

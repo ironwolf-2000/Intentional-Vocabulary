@@ -9,10 +9,10 @@ import {
   Kbd,
   Center,
   Divider,
-  Paper,
   Badge,
   Tooltip,
   ActionIcon,
+  Blockquote,
 } from '@mantine/core';
 import { getDueCards, parseExampleText, setReviewCard } from '@/helpers';
 import { CompletedReviewsCard } from '@/components';
@@ -80,102 +80,82 @@ export const PassiveReviewPage: FC = () => {
       <Center h='100%'>
         <Card shadow='xl' radius='lg' withBorder w={720} h={'calc(100vh - 160px)'}>
           <Stack h='100%' gap={0}>
-            <Stack h='50%' justify='center' align='center' px='xl' gap='xl'>
-              <Text size='xl' fw={600} c='dark.8' ta='center'>
-                How well do you understand the highlighted word?
+            <Stack h='50%' justify='center' gap='xl' px='xl'>
+              <Text size='xl' fw={600} c='dark.8'>
+                Do you understand the highlighted text?
               </Text>
 
-              <Paper
-                p='xl'
-                radius='lg'
-                shadow='sm'
-                withBorder
-                style={{
-                  background: 'var(--mantine-color-blue-0)',
-                  backdropFilter: 'blur(20px)',
-                  borderColor: 'var(--mantine-color-blue-4)',
-                  maxWidth: 600,
-                }}
-              >
-                <Text size='lg' lh={1.6} ta='center' c='dark.9' fz={{ base: 'md', sm: 'lg' }}>
+              <Blockquote color='indigo.2' radius='md' p='lg' fz='xs'>
+                <Text size='lg' lh={1.6} fs='italic' ta='left' c='dark.9'>
                   {parseExampleText(exampleSentence)}
                 </Text>
-              </Paper>
+              </Blockquote>
             </Stack>
 
             <Divider px={32} />
 
             <Stack
               h='50%'
-              justify='center'
-              align='center'
               px='xl'
+              gap='lg'
+              py='lg'
               pos='relative'
-              gap={0}
               style={{ cursor: answerShown ? 'default' : 'pointer' }}
               onClick={() => !answerShown && setAnswerShown(true)}
             >
               {!answerShown ? (
-                <Text size='lg' c='dimmed'>
-                  Press <Kbd>Space</Kbd> to reveal the answer
-                </Text>
+                <Stack h='100%' justify='center'>
+                  <Text size='lg' c='dimmed' ta='center'>
+                    Press <Kbd>Space</Kbd> to reveal the answer
+                  </Text>
+                </Stack>
               ) : (
-                <>
-                  <Group gap={4} mb='md' pos='absolute' top={20} left={20}>
-                    <Text fz={24} fw={700} ta={{ base: 'center', sm: 'left' }}>
+                <Stack gap='sm' w='100%'>
+                  <Group gap={4} align='center'>
+                    <Text fz={28} fw={600} mb={4}>
                       {card.word}
                     </Text>
-
                     <Tooltip label="Audio isn't available in prototype version" withArrow color='dark'>
-                      <ActionIcon variant='subtle' color='dark' size='md' mt={4} aria-label='Audio (coming soon)'>
+                      <ActionIcon variant='subtle' color='dark' size='lg' aria-label='Audio'>
                         <IconVolume size={24} stroke={1.5} />
                       </ActionIcon>
                     </Tooltip>
                   </Group>
 
-                  <Stack gap='xs' mb={40}>
-                    <Group gap='xs'>
-                      <Badge variant='light' color='indigo' size='md'>
-                        {card.partOfSpeech.value}
-                      </Badge>
-                      <Text size='lg' ta='center'>
-                        {card.definition}
-                      </Text>
-                    </Group>
-                    {card.synonyms?.length ? (
-                      <>
-                        <Divider label='Synonyms' labelPosition='left' c='dimmed' />
-                        <Group gap='xs' wrap='wrap'>
-                          {card.synonyms?.map((word, idx) => (
-                            <Badge key={`syn-${idx}`} variant='light' color='blue' size='sm' radius='xl'>
-                              {word}
-                            </Badge>
-                          ))}
-                        </Group>
-                      </>
-                    ) : null}
-                  </Stack>
+                  <Group gap='xs'>
+                    <Badge variant='light' color='indigo' size='md'>
+                      {card.partOfSpeech.value}
+                    </Badge>
+                    <Text size='lg' fw={500} style={{ flex: 1 }}>
+                      {card.definition}
+                    </Text>
+                  </Group>
 
-                  <Group justify='center' pos='absolute' bottom={20} gap='lg' w='100%'>
+                  {card.synonyms?.length ? (
+                    <>
+                      <Divider label='Synonyms' labelPosition='left' />
+                      <Group gap='xs' wrap='wrap'>
+                        {card.synonyms.map((word, idx) => (
+                          <Badge key={idx} variant='light' color='blue' radius='xl'>
+                            {word}
+                          </Badge>
+                        ))}
+                      </Group>
+                    </>
+                  ) : null}
+
+                  <Group justify='center' gap='md' pos='absolute' bottom={12} w='calc(100% - 64px)'>
                     <Button color='red' variant='outline' size='md' onClick={() => handleResponse('not-at-all')}>
-                      <Group gap={6}>
-                        <Text span>Not at all</Text>
-                      </Group>
+                      Not at all
                     </Button>
-
                     <Button color='yellow' variant='outline' size='md' onClick={() => handleResponse('somewhat')}>
-                      <Group gap={6}>
-                        <Text span>Somewhat</Text>
-                      </Group>
+                      Somewhat
                     </Button>
-
                     <Button color='green' variant='outline' size='md' onClick={() => handleResponse('completely')}>
-                      <Group gap={6}>
-                        <Text span>Completely</Text>
-                      </Group>
+                      Completely
                     </Button>
                   </Group>
-                </>
+                </Stack>
               )}
             </Stack>
           </Stack>

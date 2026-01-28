@@ -87,6 +87,8 @@ export const IndexPage: FC = () => {
                 <Box>
                   <Button
                     leftSection={<IconPlayerPlayFilled size={14} />}
+                    component={Link}
+                    to='/active-review'
                     radius='md'
                     color='green'
                     size='md'
