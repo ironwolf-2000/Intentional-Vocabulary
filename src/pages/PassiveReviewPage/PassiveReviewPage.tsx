@@ -145,15 +145,39 @@ export const PassiveReviewPage: FC = () => {
                   ) : null}
 
                   <Group justify='center' gap='md' pos='absolute' bottom={12} w='calc(100% - 64px)'>
-                    <Button color='red' variant='outline' size='md' onClick={() => handleResponse('not-at-all')}>
-                      Not at all
-                    </Button>
-                    <Button color='yellow' variant='outline' size='md' onClick={() => handleResponse('somewhat')}>
-                      Somewhat
-                    </Button>
-                    <Button color='green' variant='outline' size='md' onClick={() => handleResponse('completely')}>
-                      Completely
-                    </Button>
+                    <Tooltip
+                      openDelay={1500}
+                      withArrow
+                      position='bottom'
+                      label='I would not recognize this in new contexts'
+                      color='red'
+                    >
+                      <Button color='red' variant='outline' size='md' onClick={() => handleResponse('not-at-all')}>
+                        Not at all
+                      </Button>
+                    </Tooltip>
+                    <Tooltip
+                      openDelay={1500}
+                      withArrow
+                      position='bottom'
+                      label='I recognize it here, but not reliably'
+                      color='yellow'
+                    >
+                      <Button color='yellow' variant='outline' size='md' onClick={() => handleResponse('somewhat')}>
+                        Somewhat
+                      </Button>
+                    </Tooltip>
+                    <Tooltip
+                      openDelay={1500}
+                      withArrow
+                      position='bottom'
+                      label="I'm confident across contexts"
+                      color='green'
+                    >
+                      <Button color='green' variant='outline' size='md' onClick={() => handleResponse('completely')}>
+                        Completely
+                      </Button>
+                    </Tooltip>
                   </Group>
                 </Stack>
               )}

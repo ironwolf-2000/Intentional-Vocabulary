@@ -15,7 +15,14 @@ import {
   Tooltip,
   ActionIcon,
 } from '@mantine/core';
-import { IconCheck, IconAlertCircle, IconArrowRight, IconEye, IconInfoCircle } from '@tabler/icons-react';
+import {
+  IconCheck,
+  IconAlertCircle,
+  IconArrowRight,
+  IconEye,
+  IconInfoCircle,
+  IconExclamationCircle,
+} from '@tabler/icons-react';
 import { getDueCards, parseExampleText, setReviewCard } from '@/helpers';
 import { CompletedReviewsCard } from '@/components';
 
@@ -188,16 +195,29 @@ export const ActiveReviewPage: FC = () => {
                   Next card
                 </Button>
               ) : (
-                <Tooltip
-                  label='The prototype version uses a simplified sentence check'
-                  color='dark.5'
-                  withArrow
-                  position='bottom'
-                >
-                  <Button color='indigo' ml='auto' leftSection={<IconCheck size={16} />} onClick={evaluateResponse}>
-                    Check
-                  </Button>
-                </Tooltip>
+                <Group justify='flex-end'>
+                  <Tooltip
+                    label='The prototype version uses a simplified sentence-checking logic.'
+                    withArrow
+                    position='bottom'
+                    color='dark.5'
+                  >
+                    <ActionIcon variant='subtle' size='md' color='dark.5' aria-label='Info'>
+                      <IconExclamationCircle size={24} />
+                    </ActionIcon>
+                  </Tooltip>
+                  <Tooltip
+                    openDelay={1500}
+                    label='Evaluation focuses on semantic fit, not grammatical perfection.'
+                    color='indigo'
+                    withArrow
+                    position='bottom'
+                  >
+                    <Button color='indigo' leftSection={<IconCheck size={16} />} onClick={evaluateResponse}>
+                      Check
+                    </Button>
+                  </Tooltip>
+                </Group>
               )}
 
               {feedback && (
