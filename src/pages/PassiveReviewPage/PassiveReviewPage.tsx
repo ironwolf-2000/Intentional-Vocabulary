@@ -82,7 +82,7 @@ export const PassiveReviewPage: FC = () => {
           <Stack h='100%' gap={0}>
             <Stack h='50%' justify='center' gap='xl' px='xl'>
               <Text size='xl' fw={600} c='dark.8'>
-                Do you understand the highlighted text?
+                Do you understand the highlighted phrase?
               </Text>
 
               <Blockquote color='indigo.2' radius='md' p='lg' fz='xs'>

@@ -189,7 +189,7 @@ export const ActiveReviewPage: FC = () => {
                 </Button>
               ) : (
                 <Tooltip
-                  label='The prototype version uses a simplified check'
+                  label='The prototype version uses a simplified sentence check'
                   color='dark.5'
                   withArrow
                   position='bottom'
