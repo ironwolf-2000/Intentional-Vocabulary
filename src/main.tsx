@@ -6,6 +6,7 @@ import { MantineProvider } from '@mantine/core';
 import { Notifications } from '@mantine/notifications';
 import '@mantine/core/styles.css';
 import '@mantine/notifications/styles.css';
+import { Analytics } from '@vercel/analytics/react';
 
 const GlobalStyle = createGlobalStyle`
   *,
@@ -42,5 +43,6 @@ createRoot(document.getElementById('root')!).render(
     <Notifications />
     <RouterProvider router={router} />
     <GlobalStyle />
+    <Analytics />
   </MantineProvider>,
 );
