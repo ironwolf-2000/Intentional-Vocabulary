@@ -48,10 +48,10 @@ export const Header: FC = () => {
 
   return (
     <AppShell.Header>
-      <Flex justify='space-between' align='center' w='100%' h='100%' px='md'>
+      <Flex justify='space-between' align='center' w='100%' h='100%' px='md' gap='md'>
         <Group gap='md'>
           <Menu position='bottom-end' width={240}>
-            <Group gap='sm'>
+            <Group gap='sm' wrap='nowrap'>
               <Tooltip label='Home page' withArrow color='blue.7'>
                 <ActionIcon component={Link} to='/' variant='subtle' size='xl'>
                   <IconHome size={28} />
@@ -87,7 +87,7 @@ export const Header: FC = () => {
 
         {searchShown && <SearchAutocomplete w={500} size='md' radius='xl' />}
 
-        <Group gap='sm'>
+        <Group gap='sm' wrap='nowrap'>
           <Tooltip label='Saved Vocabulary' withArrow color='blue.7'>
             <ActionIcon
               component={Link}

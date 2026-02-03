@@ -1,4 +1,4 @@
-import { type FC, useEffect, useMemo, useState } from 'react';
+import { type FC, useCallback, useEffect, useMemo, useState } from 'react';
 import {
   Stack,
   Card,
@@ -31,45 +31,66 @@ export const PassiveReviewPage: FC = () => {
     [card?.reviewExamples],
   );
 
-  useEffect(() => {
-    const onKeyDown = (e: KeyboardEvent) => {
-      if (e.code === 'Space') {
-        e.preventDefault();
-        setAnswerShown(true);
-      }
-    };
-
-    window.addEventListener('keydown', onKeyDown);
-    return () => window.removeEventListener('keydown', onKeyDown);
-  }, []);
-
-  const handleResponse = (responseType: 'not-at-all' | 'somewhat' | 'completely') => {
-    const dueDate = new Date();
-    dueDate.setHours(0, 0, 0, 0);
-
-    switch (responseType) {
-      case 'not-at-all':
-        dueDate.setDate(dueDate.getDate() + 1);
-        break;
-      case 'somewhat':
-        dueDate.setDate(dueDate.getDate() + 7);
-        break;
-      case 'completely':
-        dueDate.setMonth(dueDate.getMonth() + 1);
-        break;
-    }
-
-    setReviewCard('passiveReviewCards', card.id, dueDate);
-    goNext();
-  };
-
-  const goNext = () => {
+  const goNext = useCallback(() => {
     setAnswerShown(false);
 
     if (currentIndex < dueCards.length) {
       setCurrentIndex(currentIndex + 1);
     }
-  };
+  }, [currentIndex, dueCards.length]);
+
+  const handleResponse = useCallback(
+    (responseType: 'not-at-all' | 'somewhat' | 'completely') => {
+      const dueDate = new Date();
+      dueDate.setHours(0, 0, 0, 0);
+
+      switch (responseType) {
+        case 'not-at-all':
+          dueDate.setDate(dueDate.getDate() + 1);
+          break;
+        case 'somewhat':
+          dueDate.setDate(dueDate.getDate() + 7);
+          break;
+        case 'completely':
+          dueDate.setMonth(dueDate.getMonth() + 1);
+          break;
+      }
+
+      setReviewCard('passiveReviewCards', card.id, dueDate);
+      goNext();
+    },
+    [card, goNext],
+  );
+
+  useEffect(() => {
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.code === 'Space') {
+        e.preventDefault();
+        setAnswerShown(true);
+        return;
+      }
+
+      if (!answerShown) return;
+
+      switch (e.code) {
+        case 'Digit1':
+          e.preventDefault();
+          handleResponse('not-at-all');
+          break;
+        case 'Digit2':
+          e.preventDefault();
+          handleResponse('somewhat');
+          break;
+        case 'Digit3':
+          e.preventDefault();
+          handleResponse('completely');
+          break;
+      }
+    };
+
+    window.addEventListener('keydown', onKeyDown);
+    return () => window.removeEventListener('keydown', onKeyDown);
+  }, [answerShown, handleResponse]);
 
   if (currentIndex === dueCards.length) {
     return <CompletedReviewsCard />;

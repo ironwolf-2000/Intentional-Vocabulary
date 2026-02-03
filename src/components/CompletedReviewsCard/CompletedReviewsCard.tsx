@@ -30,7 +30,7 @@ export const CompletedReviewsCard: FC = () => {
               <Text size='lg' c='dark.7'>
                 You’ve reviewed all vocabulary cards scheduled for today.
               </Text>
-              <Button size='lg' radius='md' variant='filled' color='green' w={200} component={Link} to='/'>
+              <Button size='lg' radius='md' variant='filled' color='green' w={200} component={Link} mb='sm' to='/'>
                 Home page
               </Button>
             </Stack>
