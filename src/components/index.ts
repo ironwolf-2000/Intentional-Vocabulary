@@ -1,4 +1,4 @@
 export * from './CompletedReviewsCard';
-export * from './DeleteModal';
+export * from './DeleteVocabularyModal';
 export * from './Header';
 export * from './SearchAutocomplete';

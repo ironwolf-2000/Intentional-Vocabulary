@@ -15,9 +15,10 @@ import {
   Tooltip,
 } from '@mantine/core';
 import { IconTrash, IconSearch, IconInfoCircle } from '@tabler/icons-react';
-import { DeleteModal } from '@/components';
+import { DeleteVocabularyModal } from '@/components';
 import { deleteReviewCard, getReviewCards, parseExampleText } from '@/helpers';
 import type { VocabularyCard } from '@/types';
+import { LocalStorageKeys } from '@/const';
 
 const getDueDateColor = (dueDate: string): string => {
   const date = new Date(dueDate);
@@ -38,7 +39,9 @@ export const VocabularyListPage: FC = () => {
   const [search, setSearch] = useState('');
   const [itemToDelete, setItemToDelete] = useState<VocabularyCard | null>(null);
 
-  const cards = Object.values(getReviewCards(mode === 'passive' ? 'passiveReviewCards' : 'activeReviewCards'));
+  const cards = Object.values(
+    getReviewCards(mode === 'passive' ? LocalStorageKeys.PASSIVE_REVIEW_CARDS : LocalStorageKeys.ACTIVE_REVIEW_CARDS),
+  );
   const filteredCards = cards.filter((card) => card.word.toLowerCase().includes(search.toLowerCase()));
 
   const confirmDelete = () => {
@@ -46,7 +49,10 @@ export const VocabularyListPage: FC = () => {
       return;
     }
 
-    deleteReviewCard(mode === 'passive' ? 'passiveReviewCards' : 'activeReviewCards', itemToDelete.id);
+    deleteReviewCard(
+      mode === 'passive' ? LocalStorageKeys.PASSIVE_REVIEW_CARDS : LocalStorageKeys.ACTIVE_REVIEW_CARDS,
+      itemToDelete.id,
+    );
     setItemToDelete(null);
   };
 
@@ -148,7 +154,7 @@ export const VocabularyListPage: FC = () => {
           </Paper>
         </Stack>
       </Center>
-      <DeleteModal
+      <DeleteVocabularyModal
         open={itemToDelete !== null}
         deleteItemName={itemToDelete?.word ?? ''}
         mode={mode}

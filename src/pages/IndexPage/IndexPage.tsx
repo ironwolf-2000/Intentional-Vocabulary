@@ -1,14 +1,31 @@
-import { type FC } from 'react';
+import { type FC, useEffect, useState } from 'react';
 import { Button, AppShell, Group, Card, Text, Image, Stack, Tooltip, Box } from '@mantine/core';
 import { IconPlayerPlayFilled } from '@tabler/icons-react';
 import englishIcon from '@/assets/english.png';
 import { SearchAutocomplete } from '@/components';
 import { Link } from 'react-router-dom';
 import { getDueCards } from '@/helpers';
+import { LocalStorageKeys } from '@/const';
+import { LayoutWarningModal } from './LayoutWarningModal';
 
 export const IndexPage: FC = () => {
-  const passiveDueCards = getDueCards('passiveReviewCards');
-  const activeDueCards = getDueCards('activeReviewCards');
+  const [isLayoutWarningOpen, setIsLayoutWarningOpen] = useState(false);
+
+  useEffect(() => {
+    const hasSeenWarning = localStorage.getItem(LocalStorageKeys.LAYOUT_WARNING_SEEN);
+
+    if (!hasSeenWarning) {
+      queueMicrotask(() => setIsLayoutWarningOpen(true));
+    }
+  }, []);
+
+  const handleCloseLayoutWarning = () => {
+    localStorage.setItem(LocalStorageKeys.LAYOUT_WARNING_SEEN, 'true');
+    setIsLayoutWarningOpen(false);
+  };
+
+  const passiveDueCards = getDueCards(LocalStorageKeys.PASSIVE_REVIEW_CARDS);
+  const activeDueCards = getDueCards(LocalStorageKeys.ACTIVE_REVIEW_CARDS);
 
   const passiveCardsCount = Object.keys(passiveDueCards).length;
   const activeCardsCount = Object.keys(activeDueCards).length;
@@ -111,9 +128,10 @@ export const IndexPage: FC = () => {
             </Group>
           </Stack>
         </Card>
-
         <SearchAutocomplete w={720} size='lg' radius='lg' />
       </Stack>
+
+      <LayoutWarningModal open={isLayoutWarningOpen} onClose={handleCloseLayoutWarning} />
     </AppShell.Main>
   );
 };

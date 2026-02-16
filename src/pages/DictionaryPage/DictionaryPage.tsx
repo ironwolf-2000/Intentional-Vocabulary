@@ -12,22 +12,26 @@ import {
   Blockquote,
   Tooltip,
   ActionIcon,
-  Button,
-  Center,
 } from '@mantine/core';
 import { notifications } from '@mantine/notifications';
-import { Link, useNavigate, useSearchParams } from 'react-router-dom';
-import { DICTIONARY_VOCABULARY_MOCK } from '@/const';
-import { DeleteModal } from '@/components';
+import { useNavigate, useSearchParams } from 'react-router-dom';
+import { DICTIONARY_VOCABULARY_MOCK, LocalStorageKeys } from '@/const';
+import { DeleteVocabularyModal } from '@/components';
 import { IconArrowsShuffle, IconBook, IconPencil, IconVolume } from '@tabler/icons-react';
 import type { DictionaryEntryDetails, PartOfSpeech } from '@/types';
 import { parseExampleText, getReviewCards, setReviewCard, deleteReviewCard } from '@/helpers';
+import { NoEntryFound } from './NoEntryFound';
+import styled, { css } from 'styled-components';
 
 export const DictionaryPage: FC = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const word = searchParams.get('q');
   const entry = DICTIONARY_VOCABULARY_MOCK.find((e) => e.word === word);
+
+  const [hasSeenDictionaryButtons, setHasSeenDictionaryButtons] = useState(() =>
+    localStorage.getItem(LocalStorageKeys.DICTIONARY_BUTTONS_SEEN),
+  );
 
   const [currentExampleIndex, setCurrentExampleIndex] = useState<Record<number, number | undefined>>({});
   const [deleteModalData, setDeleteModalData] = useState<{ detailIndex: number; type: 'passive' | 'active' } | null>(
@@ -39,8 +43,8 @@ export const DictionaryPage: FC = () => {
   useEffect(() => {
     if (!entry) return;
 
-    const passiveReviewCards = getReviewCards('passiveReviewCards');
-    const activeReviewCards = getReviewCards('activeReviewCards');
+    const passiveReviewCards = getReviewCards(LocalStorageKeys.PASSIVE_REVIEW_CARDS);
+    const activeReviewCards = getReviewCards(LocalStorageKeys.ACTIVE_REVIEW_CARDS);
     const initial: Record<number, { passive: boolean; active: boolean }> = {};
 
     entry.details.forEach((detail, index) => {
@@ -55,7 +59,8 @@ export const DictionaryPage: FC = () => {
 
   const toggleAdd = (detailIndex: number, type: 'passive' | 'active') => {
     const detailId = entry!.details[detailIndex].id;
-    const storageKey = type === 'passive' ? 'passiveReviewCards' : 'activeReviewCards';
+    const storageKey =
+      type === 'passive' ? LocalStorageKeys.PASSIVE_REVIEW_CARDS : LocalStorageKeys.ACTIVE_REVIEW_CARDS;
     const reviewCards = getReviewCards(storageKey);
     const isAlreadyAdded = detailId in reviewCards;
 
@@ -64,6 +69,11 @@ export const DictionaryPage: FC = () => {
     } else {
       const dueDate = new Date();
       dueDate.setHours(0, 0, 0, 0);
+
+      if (!hasSeenDictionaryButtons) {
+        localStorage.setItem(LocalStorageKeys.DICTIONARY_BUTTONS_SEEN, 'true');
+        setHasSeenDictionaryButtons('true');
+      }
 
       setReviewCard(storageKey, detailId, dueDate);
       setAddedByDetail((prev) => ({
@@ -98,7 +108,8 @@ export const DictionaryPage: FC = () => {
 
     const { detailIndex, type } = deleteModalData;
     const detailId = entry!.details[detailIndex].id;
-    const storageKey = type === 'passive' ? 'passiveReviewCards' : 'activeReviewCards';
+    const storageKey =
+      type === 'passive' ? LocalStorageKeys.PASSIVE_REVIEW_CARDS : LocalStorageKeys.ACTIVE_REVIEW_CARDS;
 
     deleteReviewCard(storageKey, detailId);
     setAddedByDetail((prev) => ({
@@ -130,28 +141,7 @@ export const DictionaryPage: FC = () => {
   };
 
   if (!entry) {
-    return (
-      <AppShell.Main>
-        <Container size='sm' py='xl'>
-          <Center h='100%'>
-            <Stack w={400} gap='xl' align='center'>
-              <Stack gap='sm' align='center'>
-                <Title order={2} ta='center'>
-                  No entry found
-                </Title>
-                <Text c='dimmed' ta='center'>
-                  This prototype only includes entries for words from the search suggestions, but "
-                  <strong>{word}</strong>" is not one of them.
-                </Text>
-              </Stack>
-              <Button size='lg' radius='md' variant='light' color='blue' w={200} component={Link} to='/'>
-                Home page
-              </Button>
-            </Stack>
-          </Center>
-        </Container>
-      </AppShell.Main>
-    );
+    return <NoEntryFound word={word} />;
   }
 
   const renderBadge = (partOfSpeech: PartOfSpeech) => {
@@ -175,15 +165,18 @@ export const DictionaryPage: FC = () => {
             withArrow
             color='indigo'
           >
-            <ActionIcon
-              size='md'
-              variant={addedByDetail[index]?.passive ? 'filled' : 'subtle'}
-              color='indigo'
-              onClick={() => toggleAdd(index, 'passive')}
-              aria-label='Passive'
-            >
-              <IconBook size={18} />
-            </ActionIcon>
+            <GlowWrapper $active={!hasSeenDictionaryButtons}>
+              <ActionIcon
+                radius='50%'
+                size='md'
+                variant={addedByDetail[index]?.passive ? 'filled' : 'subtle'}
+                color='indigo'
+                onClick={() => toggleAdd(index, 'passive')}
+                aria-label='Passive'
+              >
+                <IconBook size={18} />
+              </ActionIcon>
+            </GlowWrapper>
           </Tooltip>
 
           <Tooltip
@@ -191,15 +184,18 @@ export const DictionaryPage: FC = () => {
             withArrow
             color='indigo'
           >
-            <ActionIcon
-              size='md'
-              variant={addedByDetail[index]?.active ? 'filled' : 'subtle'}
-              color='indigo'
-              onClick={() => toggleAdd(index, 'active')}
-              aria-label='Active'
-            >
-              <IconPencil size={18} />
-            </ActionIcon>
+            <GlowWrapper $active={!hasSeenDictionaryButtons}>
+              <ActionIcon
+                radius='50%'
+                size='md'
+                variant={addedByDetail[index]?.active ? 'filled' : 'subtle'}
+                color='indigo'
+                onClick={() => toggleAdd(index, 'active')}
+                aria-label='Active'
+              >
+                <IconPencil size={18} />
+              </ActionIcon>
+            </GlowWrapper>
           </Tooltip>
         </Group>
 
@@ -305,7 +301,7 @@ export const DictionaryPage: FC = () => {
           {entry.details.map((detail, detailIndex) => renderDetail(detail, detailIndex))}
         </Stack>
       </Container>
-      <DeleteModal
+      <DeleteVocabularyModal
         open={deleteModalData !== null}
         deleteItemName={entry.word}
         mode={deleteModalData?.type ?? 'passive'}
@@ -315,3 +311,26 @@ export const DictionaryPage: FC = () => {
     </AppShell.Main>
   );
 };
+
+const GlowWrapper = styled.div<{ $active: boolean }>`
+  display: inline-flex;
+  border-radius: 50%;
+  transition: box-shadow 150ms ease;
+  background: transparent;
+
+  ${({ $active }) =>
+    $active &&
+    css`
+      animation: pulse-glow 2s ease-in-out infinite;
+
+      @keyframes pulse-glow {
+        0%,
+        100% {
+          box-shadow: 0 0 8px rgba(99, 102, 241, 0.45);
+        }
+        50% {
+          box-shadow: 0 0 12px rgba(99, 102, 241, 0.65);
+        }
+      }
+    `}
+`;

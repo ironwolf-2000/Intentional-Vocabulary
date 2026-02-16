@@ -1,5 +1,17 @@
 import type { DictionaryEntry } from '@/types';
 
+export const LocalStorageKeys = {
+  LAYOUT_WARNING_SEEN: 'layoutWarningSeen',
+  DICTIONARY_BUTTONS_SEEN: 'dictionaryButtonsSeen',
+  ACTIVE_REVIEW_CARDS: 'activeReviewCards',
+  PASSIVE_REVIEW_CARDS: 'passiveReviewCards',
+} as const;
+
+export type LocalStorageKey = (typeof LocalStorageKeys)[keyof typeof LocalStorageKeys];
+export type ReviewCardStorageKey =
+  | typeof LocalStorageKeys.ACTIVE_REVIEW_CARDS
+  | typeof LocalStorageKeys.PASSIVE_REVIEW_CARDS;
+
 export const DICTIONARY_VOCABULARY_MOCK: DictionaryEntry[] = [
   {
     id: '1',

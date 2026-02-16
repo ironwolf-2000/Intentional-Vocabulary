@@ -1,6 +1,6 @@
 import { Text } from '@mantine/core';
 import type { VocabularyCard } from './types';
-import { DICTIONARY_VOCABULARY_MOCK } from './const';
+import { DICTIONARY_VOCABULARY_MOCK, type ReviewCardStorageKey } from './const';
 
 export const parseExampleText = (text: string, useClozeDeletion = false): React.ReactNode => {
   const wordRegex = /<word>(.*?)<\/word>/g;
@@ -29,18 +29,18 @@ export const parseExampleText = (text: string, useClozeDeletion = false): React.
   return parts;
 };
 
-export const getReviewCards = (key: 'passiveReviewCards' | 'activeReviewCards'): Record<string, VocabularyCard> => {
+export const getReviewCards = (key: ReviewCardStorageKey): Record<string, VocabularyCard> => {
   const stored = localStorage.getItem(key);
   return stored ? JSON.parse(stored) : {};
 };
 
-export const deleteReviewCard = (key: 'passiveReviewCards' | 'activeReviewCards', cardId: string) => {
+export const deleteReviewCard = (key: ReviewCardStorageKey, cardId: string) => {
   const reviewCards = getReviewCards(key);
   delete reviewCards[cardId];
   localStorage.setItem(key, JSON.stringify(reviewCards));
 };
 
-export const setReviewCard = (key: 'passiveReviewCards' | 'activeReviewCards', cardId: string, dueDate: Date) => {
+export const setReviewCard = (key: ReviewCardStorageKey, cardId: string, dueDate: Date) => {
   const reviewCards = getReviewCards(key);
 
   if (cardId in reviewCards) {
@@ -62,7 +62,7 @@ export const setReviewCard = (key: 'passiveReviewCards' | 'activeReviewCards', c
   localStorage.setItem(key, JSON.stringify(reviewCards));
 };
 
-export const getDueCards = (key: 'passiveReviewCards' | 'activeReviewCards'): Record<string, VocabularyCard> => {
+export const getDueCards = (key: ReviewCardStorageKey): Record<string, VocabularyCard> => {
   const reviewCards = getReviewCards(key);
   const filteredCards = [];
 

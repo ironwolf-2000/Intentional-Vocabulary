@@ -2,7 +2,7 @@ import { Modal, Group, Stack, Divider, Button, Text } from '@mantine/core';
 import { IconAlertTriangle, IconTrash } from '@tabler/icons-react';
 import type { FC } from 'react';
 
-type DeleteModalProps = {
+type DeleteVocabularyModalProps = {
   open: boolean;
   deleteItemName: string;
   mode: 'passive' | 'active';
@@ -10,7 +10,13 @@ type DeleteModalProps = {
   onDelete: () => void;
 };
 
-export const DeleteModal: FC<DeleteModalProps> = ({ open, deleteItemName, mode, onClose, onDelete }) => {
+export const DeleteVocabularyModal: FC<DeleteVocabularyModalProps> = ({
+  open,
+  deleteItemName,
+  mode,
+  onClose,
+  onDelete,
+}) => {
   return (
     <Modal
       opened={open}

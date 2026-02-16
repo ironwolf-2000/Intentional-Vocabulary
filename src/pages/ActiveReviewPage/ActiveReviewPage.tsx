@@ -25,6 +25,7 @@ import {
 } from '@tabler/icons-react';
 import { getDueCards, parseExampleText, setReviewCard } from '@/helpers';
 import { CompletedReviewsCard } from '@/components';
+import { LocalStorageKeys } from '@/const';
 
 export const ActiveReviewPage: FC = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -35,7 +36,7 @@ export const ActiveReviewPage: FC = () => {
   } | null>(null);
   const [wordRevealed, setWordRevealed] = useState(false);
 
-  const dueCards = useMemo(() => Object.values(getDueCards('activeReviewCards')), []);
+  const dueCards = useMemo(() => Object.values(getDueCards(LocalStorageKeys.ACTIVE_REVIEW_CARDS)), []);
   const card = dueCards[currentIndex];
 
   const goNext = () => {
@@ -103,7 +104,7 @@ export const ActiveReviewPage: FC = () => {
       dueDate.setHours(0, 0, 0, 0);
       dueDate.setDate(dueDate.getDate() + selectedResponse.daysToAdd - (wordRevealed ? 5 : 0));
 
-      setReviewCard('activeReviewCards', card.id, dueDate);
+      setReviewCard(LocalStorageKeys.ACTIVE_REVIEW_CARDS, card.id, dueDate);
     }
   };
 
@@ -118,7 +119,7 @@ export const ActiveReviewPage: FC = () => {
           <Stack h='100%' gap={0}>
             <Stack h='50%' justify='center' gap='lg' px='xl'>
               <Text size='xl' fw={600} mb={4}>
-                Practice using a word that matches the definition below
+                Use a word or expression that matches the definition below.
               </Text>
 
               <Stack gap='sm'>
@@ -156,7 +157,7 @@ export const ActiveReviewPage: FC = () => {
                   <Tooltip
                     label={
                       wordRevealed
-                        ? `Target word: ${card.word}`
+                        ? `Revealed: ${card.word}`
                         : 'Revealing the word may reduce the learning value of your answer'
                     }
                     withArrow
